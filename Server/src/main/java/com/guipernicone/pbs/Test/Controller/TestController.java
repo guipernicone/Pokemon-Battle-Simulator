@@ -12,4 +12,9 @@ public class TestController {
 	public String hello_world() {
 		return "Hello World!";
 	}
+	
+	@GetMapping("auth")
+	public String auth_test() {
+		return "Acess Granted";
+	}
 }

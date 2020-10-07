@@ -11,8 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.guipernicone.pbs.Security.Service.AuthenticationService;
+import com.guipernicone.pbs.Security.Service.TokenService;
+import com.guipernicone.pbs.User.UserRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -20,6 +23,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private AuthenticationService authenticationService;
+	
+	@Autowired
+	private TokenService tokenService;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	/**
 	 * Authorize configure
@@ -40,7 +49,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			
 			// Disable the creation of sessions
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		
+			.and()
+			
+			// Add a filter to validate a token given on the header
+			.addFilterBefore(new AuthenticationByTokenFilter(tokenService, userRepository), UsernamePasswordAuthenticationFilter.class);
+			
+			
 	}
 	
 	/**

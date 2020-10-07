@@ -17,6 +17,9 @@ public class AuthenticationService implements UserDetailsService{
 	@Autowired
 	private UserRepository userRepository;
 	
+	/**
+	 * Validate if the email exist
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		

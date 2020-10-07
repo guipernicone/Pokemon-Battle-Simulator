@@ -1,10 +1,15 @@
 package com.guipernicone.pbs.Form;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class UserLoginForm {
 
+	@NotNull
 	private String email;
+	
+	@NotNull
 	private String password;
 	
 	

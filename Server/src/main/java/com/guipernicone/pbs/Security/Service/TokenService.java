@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.guipernicone.pbs.User.User;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -20,6 +21,12 @@ public class TokenService {
 	@Value("${jwt.secret}")
 	private String secret;
 	
+	/**
+	 * Generate a JWT token from the user Id
+	 * 
+	 * @param authentication - Contains the current user
+	 * @return Token
+	 */
 	public String generateToken(Authentication authentication) {
 		User user = ( User ) authentication.getPrincipal();
 		
@@ -33,6 +40,35 @@ public class TokenService {
 				.setExpiration(expirationDate)
 				.signWith(SignatureAlgorithm.HS256, secret)
 				.compact();
+	}
+
+	/**
+	 * Validate a jwt token
+	 * 
+	 * @param token
+	 * @return
+	 */
+	public boolean isTokenValid(String token) {
+		try {
+			Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
+			return true;
+		}
+		catch(Exception e){
+			return false;
+		}
+		
+	}
+
+	/**
+	 * Get the user id on the jwt token
+	 * 
+	 * @param token
+	 * @return userId
+	 */
+	public String getUserId(String token) {
+		Claims body = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+		
+		return body.getSubject();
 	}
 
 }
