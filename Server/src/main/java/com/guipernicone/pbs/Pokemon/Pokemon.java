@@ -1,8 +1,10 @@
 package com.guipernicone.pbs.Pokemon;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Document(collection = "Pokemon")
 public class Pokemon {
 	
 	@Id
