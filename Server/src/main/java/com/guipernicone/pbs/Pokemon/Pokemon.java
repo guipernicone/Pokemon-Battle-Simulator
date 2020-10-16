@@ -126,7 +126,7 @@ public class Pokemon {
 	@Field("experience_growth")
 	private int experienceGrowth;
 	
-
+	
 	public String getId() {
 		return id;
 	}
