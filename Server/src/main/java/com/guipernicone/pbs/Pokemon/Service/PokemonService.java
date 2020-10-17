@@ -93,13 +93,13 @@ public class PokemonService {
 			
 			Float pokemon1status = (float) calculatePokemonStatus(pokemon1);
 			Float pokemon2status = (float) calculatePokemonStatus(pokemon2);
-			
+
 			Float pokemon1TypeMultiplier = getPokemonType(pokemon1, pokemon2.getFirstType());
 			pokemon1TypeMultiplier = pokemon1TypeMultiplier * getPokemonType(pokemon1, pokemon2.getSecondType());
 			
 			Float pokemon2TypeMultiplier = getPokemonType(pokemon2, pokemon1.getFirstType());
 			pokemon2TypeMultiplier = pokemon2TypeMultiplier * getPokemonType(pokemon2, pokemon1.getSecondType());
-			
+
 			pokemon1status = pokemon1status * pokemon2TypeMultiplier;
 			pokemon2status = pokemon2status * pokemon1TypeMultiplier;
 			
