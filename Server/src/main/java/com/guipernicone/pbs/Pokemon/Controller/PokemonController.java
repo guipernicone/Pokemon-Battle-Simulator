@@ -2,7 +2,9 @@ package com.guipernicone.pbs.Pokemon.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,6 +64,22 @@ public class PokemonController {
 			if(winner != -1) {
 				return ResponseEntity.ok(winner);
 			}
+		}
+
+		return ResponseEntity.badRequest().body("Invalid Pokemon Pokedex Index");
+	}
+	
+	@GetMapping("/list")
+	private ResponseEntity<?> getPokemonsStatusList(@RequestParam int page, @RequestParam int qty) {
+		
+		if (page >= 0 && qty > 0) {
+			Page<Pokemon> pokemons = pokemonService.getPokemonsStatusList(page, qty);
+			
+			if (pokemons != null) 
+			{
+				return ResponseEntity.ok(pokemons);
+			}
+			return ResponseEntity.notFound().build();
 		}
 
 		return ResponseEntity.badRequest().body("Invalid Pokemon Pokedex Index");
