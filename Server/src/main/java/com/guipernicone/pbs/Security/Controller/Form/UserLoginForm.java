@@ -1,4 +1,4 @@
-package com.guipernicone.pbs.Form;
+package com.guipernicone.pbs.Security.Controller.Form;
 
 import javax.validation.constraints.NotNull;
 

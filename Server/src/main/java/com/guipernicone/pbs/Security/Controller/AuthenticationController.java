@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.guipernicone.pbs.Form.UserLoginForm;
 import com.guipernicone.pbs.Security.Controller.Dto.TokenDto;
+import com.guipernicone.pbs.Security.Controller.Form.UserLoginForm;
 import com.guipernicone.pbs.Security.Service.TokenService;
 
 @RestController

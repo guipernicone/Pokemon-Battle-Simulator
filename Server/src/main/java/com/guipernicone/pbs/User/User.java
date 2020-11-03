@@ -17,6 +17,7 @@ public class User implements UserDetails {
 	private String password;
 	private String name;
 	private String username;
+	private String role;
 	
 	public String getId() {
 		return id;
@@ -58,6 +59,14 @@ public class User implements UserDetails {
 		this.username = username;
 	}
 	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
