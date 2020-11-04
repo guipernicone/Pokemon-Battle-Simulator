@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.guipernicone.pbs.User.User;
 import com.guipernicone.pbs.User.UserRepository;
+import com.guipernicone.pbs.User.Controller.Dto.UserInfoDto;
 import com.guipernicone.pbs.User.Controller.Form.CreateUserForm;
+import com.guipernicone.pbs.User.Controller.Form.UpdateUserForm;
 
 @RestController
 @RequestMapping("/user")
@@ -32,9 +35,7 @@ public class UserController {
 	public ResponseEntity<?> createUser(@PathVariable String id, @RequestBody @Valid CreateUserForm createUserForm) {
 		
 		Optional<User> optionalUser = userRepository.findById(id);
-		System.out.println("create user");
-		System.out.println(id);
-		System.out.println(optionalUser.isPresent());
+
 		if (optionalUser.isPresent())
 		{
 			User requestUser = optionalUser.get();
@@ -65,21 +66,66 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Request User not found");
 	}
 	
-	@GetMapping
-	public ResponseEntity<?> getUser() {
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getUser(@PathVariable String id) {
 		
-		return ResponseEntity.ok("ok");
+		Optional<User> optionalUser = userRepository.findById(id);
+
+		if (optionalUser.isPresent())
+		{
+			User user = optionalUser.get();
+			
+			UserInfoDto userDto = new UserInfoDto();
+			userDto.setId(user.getId());
+			userDto.setName(user.getName());
+			userDto.setEmail(user.getEmail());
+			userDto.setUsername(user.getUsername());
+			userDto.setRole(user.getRole());
+			
+			return ResponseEntity.ok(userDto);
+		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 	
-	@DeleteMapping
-	public ResponseEntity<?> deleteUser() {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteUser(@PathVariable String id, @RequestParam String delId) {
 		
-		return ResponseEntity.ok("ok");
+		Optional<User> optionalUser = userRepository.findById(id);
+
+		if (optionalUser.isPresent())
+		{
+			User requestUser = optionalUser.get();
+			
+			if (requestUser.getRole().equals("ADMIN")) {
+				userRepository.deleteById(delId);
+				return ResponseEntity.ok("User deleted");
+			}
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Only admins can delete users");
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Request User not found");
 	}
 	
-	@PutMapping
-	public ResponseEntity<?> updateUser() {
+	@PutMapping("/{id}")
+	public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody @Valid UpdateUserForm userForm) {
 		
-		return ResponseEntity.ok("ok");
+		Optional<User> optionalUser = userRepository.findById(id);
+
+		if (optionalUser.isPresent())
+		{
+			User requestUser = optionalUser.get();
+			User user = new User();
+			user.setId(requestUser.getId());
+			user.setEmail(requestUser.getEmail());
+			user.setName(userForm.getName());
+			user.setUsername(userForm.getUsername());
+			user.setPassword(requestUser.getPassword());
+			user.setRole(requestUser.getRole());
+			
+			userRepository.save(user);
+			return ResponseEntity.ok("User Updated");
+		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 }
